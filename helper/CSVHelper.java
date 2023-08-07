@@ -16,13 +16,18 @@ import com.example.demo.entity.CodeTable;
 public class CSVHelper {
 	public static ByteArrayInputStream codeTablesToCSV(List<CodeTable> codeTableList) {
 		//		final CSVFormat format = CSVFormat.DEFAULT.withQuote(null).withDelimiter(',');
-
-		final Builder builder = CSVFormat.Builder.create().setDelimiter(',').setQuote('\"');
+		final String CRLF = "\r\n";
+		final Builder builder = CSVFormat.Builder
+				.create()
+				.setDelimiter(',')
+				.setQuoteMode(QuoteMode.ALL)
+				.setRecordSeparator(CRLF);
 
 		final CSVFormat format = builder.build();
 
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream();
-				CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
+				CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out, false, Charset.forName("Shift-JIS")),
+						format);) {
 			for (CodeTable codeTable : codeTableList) {
 				List<String> data = Arrays.asList(
 						String.valueOf(codeTable.getId()),
